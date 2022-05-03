@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"unicode"
 )
 
@@ -50,14 +51,11 @@ func parse(str []string) []string {
 	)
 	res = append(res, "(")
 	for i := 0; i < len(str); i++ {
-		fmt.Println(res)
 		if len(str[i]) > 1 {
 			buf := str[i][1 : len(str[i])-1]
 			buf2 := makeTokens(buf)
 			buf3 := parse(buf2)
-			//fmt.Println(buf3)
 			for j := 0; j < len(buf3); j++ {
-				//fmt.Println(buf3[j])
 				res = append(res, buf3[j])
 			}
 		} else {
@@ -86,7 +84,35 @@ func calculate(expression []string) int {
 	var (
 		res int
 	)
-
+	for i := 0; i < len(expression); i++ {
+		if expression[i] == ")" {
+			if expression[i-3] == "+" {
+				a, _ := strconv.Atoi(expression[i-2])
+				b, _ := strconv.Atoi(expression[i-1])
+				x := a + b
+				expression[i] = strconv.Itoa(x)
+				expression = append(expression[:i-4], expression[i:]...)
+				i -= 3
+			}
+			if expression[i-3] == "-" {
+				a, _ := strconv.Atoi(expression[i-2])
+				b, _ := strconv.Atoi(expression[i-1])
+				x := a - b
+				expression[i] = strconv.Itoa(x)
+				expression = append(expression[:i-4], expression[i:]...)
+				i -= 3
+			}
+			if expression[i-3] == "*" {
+				a, _ := strconv.Atoi(expression[i-2])
+				b, _ := strconv.Atoi(expression[i-1])
+				x := a * b
+				expression[i] = strconv.Itoa(x)
+				expression = append(expression[:i-4], expression[i:]...)
+				i -= 3
+			}
+		}
+	}
+	res, _ = strconv.Atoi(expression[0])
 	return res
 }
 
@@ -96,7 +122,7 @@ func main() {
 	)
 	expression, _ = bufio.NewReader(os.Stdin).ReadString('\n')
 	expression = expression[:len(expression)-2]
-	//fmt.Println(makeTokens(expression))        //check making array of tokens
-	fmt.Println(parse(makeTokens(expression))) //check parse
-
+	fmt.Println(makeTokens(expression))                   //check making array of tokens
+	fmt.Println(parse(makeTokens(expression)))            //check parse
+	fmt.Println(calculate(parse(makeTokens(expression)))) //check calculate
 }
