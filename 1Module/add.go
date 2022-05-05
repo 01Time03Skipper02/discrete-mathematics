@@ -41,8 +41,7 @@ func main() {
 		a, b []int32
 		p    int32
 	)
-	fmt.Scan(&c, &d)
-	fmt.Scan(&p)
+	fmt.Scan(&c, &d, &p)
 	for c > 0 {
 		a = append(a, c%p)
 		c /= p
