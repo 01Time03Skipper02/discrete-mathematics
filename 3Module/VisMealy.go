@@ -47,15 +47,15 @@ func main() {
 
 	fmt.Println("digraph {")
 	fmt.Println("    rankdir = LR")
-	fmt.Println("    dummy [label = \"\" , shape = none]")
+	/*fmt.Println("    dummy [label = \"\" , shape = none]")
 	for i := 0; i < n; i++ {
 		fmt.Println("    ", i, " [shape = circle]")
 	}
-	fmt.Println("    dummy -> ", q)
+	fmt.Println("    dummy -> ", q)*/
 	for i := 0; i < n; i++ {
 		for j := 0; j < m; j++ {
 			//fmt.Println("    ",q," -> ",goMatrix_delta[i][j]," [label = \"",array[j],"(",exitMatrix_fi[i][j],")\"]")
-			fmt.Printf("     %d -> %d [label = \"%c(%s)\"]", i, goMatrix_delta[i][j], alphabet[j], exitMatrix_fi[i][j])
+			fmt.Printf("    %d -> %d [label = \"%c(%s)\"]", i, goMatrix_delta[i][j], alphabet[j], exitMatrix_fi[i][j])
 			fmt.Println()
 		}
 		q++

@@ -2,57 +2,50 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
 func add(a, b []int32, p int) []int32 {
 	var res []int32
-	var buf int32
-	var i int
-	for ; i < int(math.Min(float64(len(a)), float64(len(b)))); i++ {
-		res = append(res, ((a[i]+b[i])+buf)%int32(p))
-		buf = (a[i] + b[i]) / int32(p)
-	}
-	if len(a) == len(b) {
-		res = append(res, buf)
-	}
-	for ; i < int(math.Max(float64(len(a)), float64(len(b)))); i++ {
-		if len(a) > len(b) {
-			res = append(res, (a[i]+buf)%int32(p))
-			buf = (a[i] + buf) / int32(p)
-			if i == len(a)-1 && buf != 0 {
-				res = append(res, buf)
-			}
+	var q int32
+	i := 0
+	if len(a) > len(b) {
+		for ; i < len(b); i++ {
+			res = append(res, (a[i]+b[i]+q)%int32(p))
+			q = (a[i] + b[i] + q) / int32(p)
 		}
-		if len(b) > len(a) {
-			res = append(res, b[i]+buf)
-			buf = (b[i] + buf) / int32(p)
-			if i == len(b)-1 && buf != 0 {
-				res = append(res, buf)
-			}
+		for j := len(b); j < len(a); j++ {
+			res = append(res, (a[j]+q)%int32(p))
+			q = (a[j] + q) / int32(p)
+		}
+		if q > 0 {
+			res = append(res, q)
+		}
+	} else if len(a) < len(b) {
+		for ; i < len(a); i++ {
+			res = append(res, (a[i]+b[i]+q)%int32(p))
+			q = (a[i] + b[i] + q) / int32(p)
+		}
+		for j := len(a); j < len(b); j++ {
+			res = append(res, (b[j]+q)%int32(p))
+			q = (b[j] + q) / int32(p)
+		}
+		if q > 0 {
+			res = append(res, q)
+		}
+	} else {
+		for ; i < len(a); i++ {
+			res = append(res, (a[i]+b[i]+q)%int32(p))
+			q = (a[i] + b[i] + q) / int32(p)
+		}
+		if q > 0 {
+			res = append(res, q)
 		}
 	}
 	return res
 }
 
 func main() {
-	var (
-		c, d int32
-		a, b []int32
-		p    int32
-	)
-	fmt.Scan(&c, &d, &p)
-	for c > 0 {
-		a = append(a, c%p)
-		c /= p
-	}
-	for d > 0 {
-		b = append(b, d%p)
-		d /= p
-	}
-	res := add(a, b, int(p))
-
-	fmt.Println(a)
-	fmt.Println(b)
-	fmt.Println(res)
+	a := []int32{0, 1, 0, 0, 1}
+	b := []int32{0, 1, 1, 0, 1}
+	fmt.Println(add(a, b, 2))
 }
